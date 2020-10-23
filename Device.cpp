@@ -1,10 +1,10 @@
-#include "DeviceContainer.h"
+#include "Device.h"
 
-DeviceContainer::DeviceContainer() {
+Device::Device() {
     this->init();
 }
 
-void DeviceContainer::init() {
+void Device::init() {
     // Normally, we need to get device info from somewhere, but for now, use
     // sandbox state.
     this->master = true;
@@ -12,12 +12,12 @@ void DeviceContainer::init() {
     this->dev_load = 1.0;
 }
 
-bool DeviceContainer::is_master() {
+bool Device::is_master() {
     return this->master;
 }
-string DeviceContainer::get_dev_id() {
+string Device::get_dev_id() {
     return this->dev_identifier;
 }
-double DeviceContainer::get_dev_load() {
+double Device::get_dev_load() {
     return this->dev_load;
 }

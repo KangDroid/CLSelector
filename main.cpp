@@ -24,7 +24,7 @@
 #include <unistd.h>
 
 // Local Includes
-#include "DeviceContainer.h"
+#include "Device.h"
 
 /**
  * WARNING: THIS CONSTANT MAY NEED TO BE ADJUSTED ON LOW-MEMORY SYSTEM. THIS CONSTANT REQUIRES AT LEAST 2GB OF MEMORIES!
@@ -112,7 +112,7 @@ int main(int argc, char** argv) {
 
     // Let selected device as "master_device"
     // TODO: Dynamically select devicess
-    DeviceContainer master_device;
+    Device master_device;
 
     // If argument is less than 2
     if (argc != 2) {

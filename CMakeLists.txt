@@ -3,4 +3,4 @@ project(CLSelector)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(CLSelector main.cpp DeviceContainer.cpp)
+add_executable(CLSelector main.cpp Device.cpp)

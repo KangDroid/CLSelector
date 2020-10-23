@@ -4,7 +4,7 @@
 
 using namespace std;
 
-class DeviceContainer {
+class Device {
 private:
     void init();
     bool master;
@@ -12,7 +12,7 @@ private:
     double dev_load;
 
 public:
-    DeviceContainer();
+    Device();
     bool is_master();
     string get_dev_id();
     double get_dev_load();
