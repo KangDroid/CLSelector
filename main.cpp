@@ -107,8 +107,8 @@ bool copy_program(const char* from, const char* dest) {
  * Select, Push, Execute
  */
 int main(int argc, char** argv) {
-    // TODO: These location_destination should only contains NFS Folder, not image itself.
-    const string location_destination = "/Users/KangDroid/Desktop/process_copied";
+    // TODO: These location_destination should only contains NFS Folder.
+    const string location_destination = "/Users/KangDroid/Desktop/";
 
     // Let selected device as "master_device"
     // TODO: Dynamically select devicess
@@ -128,5 +128,5 @@ int main(int argc, char** argv) {
     }
 
     // Copy Program to destination
-    copy_program(argv[1], location_destination.c_str());
+    copy_program(argv[1], (location_destination + path_directory.filename().string()).c_str());
 }
