@@ -16,6 +16,7 @@
 
 // The C++ Includes
 #include <iostream>
+#include <filesystem>
 
 // The C-Style Includes
 #include <fcntl.h>
@@ -119,6 +120,13 @@ int main(int argc, char** argv) {
         return -1;
     }
 
+    // Check argv[0] is a valid path
+    filesystem::path path_directory(argv[1]);
+    if (!filesystem::exists(path_directory)) {
+        cerr << "Request file: " << filesystem::absolute(path_directory) << " does not exists." << endl;
+        return -1;
+    }
+
     // Copy Program to destination
-    copy_program(argv[0], location_destination.c_str());
+    copy_program(argv[1], location_destination.c_str());
 }
