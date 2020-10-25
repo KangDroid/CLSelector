@@ -5,6 +5,10 @@ using namespace std;
 
 int main(void) {
     Server server;
-    server.receive_print();
+    int counter = 0;
+    while (counter < 10) {
+        server.receive_exec();
+        counter++;
+    }
     return 0;
 }

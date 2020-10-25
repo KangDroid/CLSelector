@@ -27,6 +27,8 @@ private:
     int queue_limit;
 public:
     Server();
+    ~Server();
+    void accept_server();
     void send_file_info();
     void receive_print();
     void receive_exec();
