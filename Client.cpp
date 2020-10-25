@@ -1,10 +1,28 @@
 #include "Client.h"
 Client::Client() {
+    int counter = 0;
+    while (counter < 10) {
+        if (!(this->init())) {
+            cerr << "Error occured when initializing client. Trying again.." << endl;
+            sleep(1);
+            counter++;
+        } else {
+            break;
+        }
+    }
+
+    if (counter == 10) {
+        cerr << "Cannot create client. Exiting" << endl;
+        exit(-1);
+    }
+}
+
+bool Client::init() {
     // Create Socket
     this->socket_descriptor = socket(AF_INET, SOCK_STREAM, 0);
     if (this->socket_descriptor == -1) {
         perror("Error occured: ");
-        exit(-1);
+        return false;
     }
 
     // Set Port
@@ -17,13 +35,15 @@ Client::Client() {
 
     if (inet_pton(AF_INET, "127.0.0.1", &address.sin_addr) != 1) {
         cerr << "Error occured" << endl;
+        return false;
     }
 
     // Connect to server
-    if (connect(socket_descriptor, (struct sockaddr *)&address, sizeof(address)) < 0) { 
-        perror("Connecting to server failed: ");
-        exit(-1);
+    if (connect(socket_descriptor, (struct sockaddr *)&address, sizeof(address)) < 0) {
+        perror("Error occured when connecting to server: ");
+        return false;
     }
+    return true;
 }
 
 void Client::receive_print() {
@@ -39,4 +59,7 @@ void Client::send_file_info() {
     // for now, let file size = 4kb
     string size_file = "3kb";
     int sent = send(socket_descriptor, size_file.c_str(), size_file.length(), 0);
+    if (sent == -1) {
+        perror("Error occured when sending information to server: ");
+    }
 }

@@ -57,7 +57,7 @@ void Server::receive_print() {
     size_t buffer_size = 1073741824; // a gigabyte
     char* buffer = new char[buffer_size];
     int read_val = read(after_sock_des, buffer, buffer_size);
-    buffer[read_val-1] = 0;
+    buffer[read_val] = 0;
     cout << buffer << endl;
     delete[] buffer;
 }

@@ -26,6 +26,7 @@ private:
     int socket_descriptor;
     struct sockaddr_in address;
     int address_size;
+    bool init();
 
 public:
     Client();

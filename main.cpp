@@ -25,6 +25,7 @@
 
 // Local Includes
 #include "Device.h"
+#include "Client.h"
 
 /**
  * WARNING: THIS CONSTANT MAY NEED TO BE ADJUSTED ON LOW-MEMORY SYSTEM. THIS CONSTANT REQUIRES AT LEAST 2GB OF MEMORIES!
@@ -129,4 +130,8 @@ int main(int argc, char** argv) {
 
     // Copy Program to destination
     copy_program(argv[1], (location_destination + path_directory.filename().string()).c_str());
+
+    // exec program.
+    Client cl;
+    cl.send_file_info();
 }
