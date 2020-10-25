@@ -32,4 +32,5 @@ public:
     Client();
     void receive_print();
     void send_file_info();
+    void send_string(string to_send);
 };

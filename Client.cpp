@@ -63,3 +63,11 @@ void Client::send_file_info() {
         perror("Error occured when sending information to server: ");
     }
 }
+
+void Client::send_string(string to_send) {
+    // for now, let file size = 4kb
+    int sent = send(socket_descriptor, to_send.c_str(), to_send.length(), 0);
+    if (sent == -1) {
+        perror("Error occured when sending information to server: ");
+    }
+}

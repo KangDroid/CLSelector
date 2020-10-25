@@ -133,5 +133,5 @@ int main(int argc, char** argv) {
 
     // exec program.
     Client cl;
-    cl.send_file_info();
+    cl.send_string((location_destination + path_directory.filename().string()));
 }
