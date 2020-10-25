@@ -61,3 +61,21 @@ void Server::receive_print() {
     cout << buffer << endl;
     delete[] buffer;
 }
+
+void Server::receive_exec() {
+    size_t buffer_size = 1073741824; // a gigabyte
+    char* buffer = new char[buffer_size];
+    int read_val = read(after_sock_des, buffer, buffer_size);
+    buffer[read_val] = 0;
+    // In this stage, all commands are transferred.
+
+    pid_t pid_what = fork();
+
+    if (pid_what == 0) {
+        // child
+        execl(buffer, buffer, NULL);
+    } else {
+        wait(NULL);
+    }
+    delete[] buffer;
+}
