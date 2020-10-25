@@ -1,5 +1,6 @@
 #include "Client.h"
-Client::Client() {
+Client::Client(string sa) {
+    this->server_addr = sa;
     int counter = 0;
     while (counter < 10) {
         if (!(this->init())) {
@@ -33,7 +34,7 @@ bool Client::init() {
     this->address.sin_port = htons(port);
     address_size = sizeof(this->address);
 
-    if (inet_pton(AF_INET, "127.0.0.1", &address.sin_addr) != 1) {
+    if (inet_pton(AF_INET, server_addr.c_str(), &address.sin_addr) != 1) {
         cerr << "Error occured" << endl;
         return false;
     }

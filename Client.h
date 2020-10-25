@@ -27,9 +27,10 @@ private:
     struct sockaddr_in address;
     int address_size;
     bool init();
+    string server_addr;
 
 public:
-    Client();
+    Client(string sa);
     void receive_print();
     void send_file_info();
     void send_string(string to_send);

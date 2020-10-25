@@ -111,6 +111,9 @@ int main(int argc, char** argv) {
     // TODO: These location_destination should only contains NFS Folder.
     const string location_destination = "/Users/KangDroid/Desktop/";
 
+    // TODO: Get IP Info from somewhere DS
+    const string address_server = "127.0.0.1";
+
     // Let selected device as "master_device"
     // TODO: Dynamically select devicess
     Device master_device;
@@ -132,6 +135,6 @@ int main(int argc, char** argv) {
     copy_program(argv[1], (location_destination + path_directory.filename().string()).c_str());
 
     // exec program.
-    Client cl;
+    Client cl(address_server);
     cl.send_string((location_destination + path_directory.filename().string()));
 }
