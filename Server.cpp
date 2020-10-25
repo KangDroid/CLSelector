@@ -44,8 +44,20 @@ Server::Server() {
     }
 }
 
+// Server --> Client
 void Server::send_file_info() {
     // for now, let file size = 4kb
     string size_file = "3kb";
     int sent = send(after_sock_des, size_file.c_str(), size_file.length(), 0);
+}
+
+
+// Client --> Server
+void Server::receive_print() {
+    size_t buffer_size = 1073741824; // a gigabyte
+    char* buffer = new char[buffer_size];
+    int read_val = read(after_sock_des, buffer, buffer_size);
+    buffer[read_val-1] = 0;
+    cout << buffer << endl;
+    delete[] buffer;
 }

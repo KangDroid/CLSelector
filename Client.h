@@ -30,4 +30,5 @@ private:
 public:
     Client();
     void receive_print();
+    void send_file_info();
 };

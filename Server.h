@@ -28,4 +28,5 @@ private:
 public:
     Server();
     void send_file_info();
+    void receive_print();
 };

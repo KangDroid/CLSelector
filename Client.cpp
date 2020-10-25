@@ -34,3 +34,9 @@ void Client::receive_print() {
     cout << buffer << endl;
     delete[] buffer;
 }
+
+void Client::send_file_info() {
+    // for now, let file size = 4kb
+    string size_file = "3kb";
+    int sent = send(socket_descriptor, size_file.c_str(), size_file.length(), 0);
+}
