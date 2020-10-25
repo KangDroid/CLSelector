@@ -45,7 +45,7 @@ using namespace std;
 bool copy_program(const char* from, const char* dest) {
     long long *ptr_buffer;
     long long *buffer_tmp = new long long[BUFFER_LENGTH];
-    int from_fd = open(from, O_RDWR | O_EXCL, S_IRWXG | S_IRWXO | S_IRWXU);
+    int from_fd = open(from, O_RDONLY | O_EXCL, S_IRWXG | S_IRWXO | S_IRWXU);
     int dest_fd = open(dest, O_RDWR | O_CREAT | O_TRUNC, S_IRWXG | S_IRWXO | S_IRWXU);
     int read_byte, write_byte;
 
