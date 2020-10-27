@@ -18,6 +18,9 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+// Local
+#include "configuration.h"
+
 using namespace std;
 
 class Client {
@@ -30,7 +33,7 @@ private:
     string server_addr;
 
 public:
-    Client(string sa);
+    Client(string sa, int portnum);
     void receive_print();
     void send_file_info();
     void send_string(string to_send);

@@ -1,5 +1,8 @@
 #include "Client.h"
-Client::Client(string sa) {
+Client::Client(string sa, int portnum) {
+    // Set Port
+    this->port = portnum;
+
     this->server_addr = sa;
     int counter = 0;
     while (counter < 10) {
@@ -25,9 +28,6 @@ bool Client::init() {
         perror("Error occured: ");
         return false;
     }
-
-    // Set Port
-    this->port = 8060;
 
     // Setup Address[sockaddr_in struct]
     this->address.sin_family = AF_INET;

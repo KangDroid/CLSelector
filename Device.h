@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Server.h"
 #include "Client.h"
+#include "configuration.h"
 #if defined (__linux__)
 #include <linux/kernel.h>
 #include <sys/syscall.h>

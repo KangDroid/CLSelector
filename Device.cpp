@@ -21,7 +21,7 @@ void Device::init() {
         this->dev_load = (double)tmp_output;
         return;
     }
-    Client cl(this->dev_addr);
+    Client cl(this->dev_addr, SUBNODE_ACCEPT_PORT);
     cl.send_string("get_info");
     string return_value = this->exchange->get_info();
     string hostname = return_value.substr(0, return_value.find(", "));

@@ -34,7 +34,7 @@ private:
     int address_size;
     int queue_limit;
 public:
-    Server();
+    Server(int portnum);
     ~Server();
     void accept_server();
     void send_file_info();

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Server.h"
+#include "configuration.h"
 
 using namespace std;
 
@@ -13,7 +14,7 @@ using namespace std;
  */
 
 int main(void) {
-    Server server;
+    Server server(SUBNODE_ACCEPT_PORT);
     int counter = 0;
     while (counter < MAXIMUM_COUNT) {
         server.receive_exec();

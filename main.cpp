@@ -175,7 +175,7 @@ int main(int argc, char** argv) {
             wait(NULL);
         }
     } else {
-        Client cl(selected->get_dev_ip());
+        Client cl(selected->get_dev_ip(), SUBNODE_ACCEPT_PORT);
         cl.send_string((location_destination + path_directory.filename().string()));
     }
 }

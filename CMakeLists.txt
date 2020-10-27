@@ -16,4 +16,7 @@ endif (APPLE)
 add_executable(CLSelector main.cpp Device.cpp Client.cpp Server.cpp)
 
 # Build Server
+execute_process (
+    COMMAND bash -c "ln -s ${PROJECT_SOURCE_DIR}/configuration.h ${PROJECT_SOURCE_DIR}/SubNode/configuration.h"
+)
 add_subdirectory(SubNode)

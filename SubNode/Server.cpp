@@ -1,6 +1,6 @@
 #include "Server.h"
 
-Server::Server() {
+Server::Server(int portnum) {
     // Set initial variable
     this->queue_limit = 5;
 
@@ -12,7 +12,7 @@ Server::Server() {
     }
 
     // Set Port
-    this->port = 8060;
+    this->port = portnum;
 
     // Setup Address[sockaddr_in struct]
     this->address.sin_family = AF_INET;
@@ -84,7 +84,7 @@ void Server::receive_exec() {
         if (!strcmp(buffer, "get_info")) {
             cout << "Got get_info, creating client.." << endl;
             // Just hardcode master = 192.168.0.8
-            Client cl("192.168.0.8");
+            Client cl("192.168.0.8", MASTER_ACCEPT_PORT);
             int return_value = -1;
             syscall(291, &return_value);
             // Host Name
