@@ -5,6 +5,8 @@
  * TODO: Receive Command argument, Fork call to execution[execlp]
  */
 
+#pragma once
+
 // C++
 #include <iostream>
 #include <fstream>

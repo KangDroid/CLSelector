@@ -1,4 +1,8 @@
+#pragma once
+
 #include <iostream>
+#include "Server.h"
+#include "Client.h"
 #if defined (__linux__)
 #include <linux/kernel.h>
 #include <sys/syscall.h>
@@ -20,9 +24,10 @@ private:
     string dev_identifier;
     string dev_addr;
     double dev_load;
+    Server* exchange;
 
 public:
-    Device(string addr);
+    Device(string addr, Server* server_exchange);
     bool is_master();
     string get_dev_id();
     string get_dev_ip();

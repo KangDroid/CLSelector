@@ -27,6 +27,7 @@
 // Local Includes
 #include "Device.h"
 #include "Client.h"
+#include "Server.h"
 
 /**
  * WARNING: THIS CONSTANT MAY NEED TO BE ADJUSTED ON LOW-MEMORY SYSTEM. THIS CONSTANT REQUIRES AT LEAST 2GB OF MEMORIES!
@@ -105,7 +106,7 @@ bool copy_program(const char* from, const char* dest) {
 
 bool compare(Device dev_one, Device dev_two) {
     if (dev_one.get_dev_load() == dev_two.get_dev_load()) {
-        if (dev_one.get_dev_id() == "DEVICE_DEBUG_MASTER" ) {
+        if (dev_one.get_dev_id() == "jetson-master" ) {
             return 1;
         }
     } else {
@@ -133,11 +134,15 @@ int main(int argc, char** argv) {
     }
 
     // Initiate Device
+    // Open Server
+    Server server_infochange(5050);
     vector<Device> device_container;
     ifstream ifs("node.txt");
     string buffer;
+    cout << "Checking device" << endl;
     while (getline(ifs, buffer)) {
-        device_container.push_back(Device(buffer));
+        cout << buffer << endl;
+        device_container.push_back(Device(buffer, &server_infochange));
     }
     
     if (device_container.size() > 1) {
@@ -164,6 +169,16 @@ int main(int argc, char** argv) {
     copy_program(argv[1], (location_destination + path_directory.filename().string()).c_str());
 
     // exec program.
-    Client cl(selected->get_dev_ip());
-    cl.send_string((location_destination + path_directory.filename().string()));
+    if (selected->get_dev_ip() == "127.0.0.1") {
+        pid_t tmp_pid = fork();
+        string to_ex = (location_destination + path_directory.filename().string());
+        if (tmp_pid == 0) {
+            execl(to_ex.c_str(), to_ex.c_str(), NULL);
+        } else {
+            wait(NULL);
+        }
+    } else {
+        Client cl(selected->get_dev_ip());
+        cl.send_string((location_destination + path_directory.filename().string()));
+    }
 }

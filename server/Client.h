@@ -1,6 +1,8 @@
 /**
  * Disclaimer
  * Most code / idea is referenced from https://github.com/Wizardous/TCP-File-Transfer
+ * 
+ * TODO: Receive Command argument, Fork call to execution[execlp]
  */
 
 // C++
@@ -15,29 +17,21 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <linux/kernel.h>
-#include <sys/syscall.h>
-
-// Local
-#include "Client.h"
 
 using namespace std;
 
-class Server {
+class Client {
 private:
-    int socket_descriptor;
-    int after_sock_des;
     int port;
+    int socket_descriptor;
     struct sockaddr_in address;
     int address_size;
-    int queue_limit;
+    bool init();
+    string server_addr;
+
 public:
-    Server();
-    ~Server();
-    void accept_server();
-    void send_file_info();
+    Client(string sa);
     void receive_print();
-    void receive_exec();
+    void send_file_info();
+    void send_string(string to_send);
 };

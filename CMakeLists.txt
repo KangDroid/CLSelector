@@ -13,7 +13,7 @@ if (APPLE)
     set(CMAKE_CXX_STANDARD 17)
 endif (APPLE)
 
-add_executable(CLSelector main.cpp Device.cpp Client.cpp)
+add_executable(CLSelector main.cpp Device.cpp Client.cpp Server.cpp)
 
 # Build Server
 add_subdirectory(server)

@@ -1,6 +1,6 @@
 #include "Server.h"
 
-Server::Server() {
+Server::Server(int port) {
     // Set initial variable
     this->queue_limit = 5;
 
@@ -11,8 +11,12 @@ Server::Server() {
         exit(-1);
     }
 
+    // Reuse socket created by master
+    int tmp = 1;
+    setsockopt(socket_descriptor, SOL_SOCKET, SO_REUSEADDR, &tmp, sizeof(int));
+
     // Set Port
-    this->port = 8060;
+    this->port = port;
 
     // Setup Address[sockaddr_in struct]
     this->address.sin_family = AF_INET;
@@ -69,6 +73,17 @@ void Server::receive_print() {
     delete[] buffer;
 }
 
+string Server::get_info() {
+    accept_server();
+    size_t buffer_size = 1073741824; // a gigabyte
+    char* buffer = new char[buffer_size];
+    int read_val = read(after_sock_des, buffer, buffer_size);
+    buffer[read_val] = 0;
+    string ret_val = string(buffer);
+    delete[] buffer;
+    return ret_val;
+}
+
 void Server::receive_exec() {
     accept_server();
     size_t buffer_size = 1073741824; // a gigabyte
@@ -81,19 +96,7 @@ void Server::receive_exec() {
 
     if (pid_what == 0) {
         // child
-        if (!strcmp(buffer, "get_info")) {
-            cout << "Got get_info, creating client.." << endl;
-            // Just hardcode master = 192.168.0.8
-            Client cl("192.168.0.8");
-            int return_value = -1;
-            syscall(291, &return_value);
-            // Host Name
-            string to_send = "jetson-node1, " + to_string(return_value);
-            cl.send_string(to_send);
-            exit(0);
-        } else {
-            execl(buffer, buffer, NULL);
-        }
+        execl(buffer, buffer, NULL);
     } else {
         wait(NULL);
     }

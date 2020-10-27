@@ -1,6 +1,7 @@
 #include "Device.h"
 
-Device::Device(string address) {
+Device::Device(string address, Server* server_exchange) {
+    this->exchange = server_exchange;
     this->dev_addr = address;
     this->init();
 }
@@ -8,19 +9,24 @@ Device::Device(string address) {
 void Device::init() {
     // Normally, we need to get device info from somewhere, but for now, use
     // sandbox state.
-    this->master = true;
-    this->dev_identifier = DEBUG_MASTER;
-    #if defined(__linux__)
-    int tmp_output = -1;
-    syscall(291, &tmp_output);
-    if (tmp_output == -1) {
-        perror("Error occured when calling syscall 291: ");
-        exit(-1);
+    if (this->dev_addr == "127.0.0.1") {
+        this->master = true;
+        this->dev_identifier = "jetson-master";
+        int tmp_output = -1;
+        syscall(291, &tmp_output);
+        if (tmp_output == -1) {
+            perror("Error occured when calling syscall 291: ");
+            exit(-1);
+        }
+        this->dev_load = (double)tmp_output;
+        return;
     }
-    this->dev_load = (double)tmp_output;
-    #else
-    this->dev_load = 0;
-    #endif
+    Client cl(this->dev_addr);
+    cl.send_string("get_info");
+    string return_value = this->exchange->get_info();
+    string hostname = return_value.substr(0, return_value.find(", "));
+    string load_instr = return_value.substr(return_value.find(", ")+2, return_value.length());
+    this->dev_load = stoi(load_instr);
 }
 
 bool Device::is_master() {
