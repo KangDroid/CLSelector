@@ -16,7 +16,7 @@ using namespace std;
 int main(void) {
     Server server(SUBNODE_ACCEPT_PORT);
     int counter = 0;
-    while (counter < MAXIMUM_COUNT) {
+    while (true) {
         server.receive_exec();
         counter++;
     }
