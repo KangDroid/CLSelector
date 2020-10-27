@@ -2,3 +2,4 @@
 CLSelector
 build/
 .vscode/
+SubNode/conf*.h
