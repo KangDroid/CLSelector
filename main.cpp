@@ -17,6 +17,7 @@
 // The C++ Includes
 #include <iostream>
 #include <filesystem>
+#include <vector>
 
 // The C-Style Includes
 #include <fcntl.h>
@@ -102,6 +103,16 @@ bool copy_program(const char* from, const char* dest) {
     return true;
 }
 
+bool compare(Device dev_one, Device dev_two) {
+    if (dev_one.get_dev_load() == dev_two.get_dev_load()) {
+        if (dev_one.get_dev_id() == "DEVICE_DEBUG_MASTER" ) {
+            return 1;
+        }
+    } else {
+        return dev_one.get_dev_load() < dev_two.get_dev_load();
+    }
+}
+
 /**
  * Input: Program File Path
  * 
@@ -109,20 +120,38 @@ bool copy_program(const char* from, const char* dest) {
  */
 int main(int argc, char** argv) {
     // TODO: These location_destination should only contains NFS Folder.
+    #if defined(__linux__)
+    const string location_destination = "/home/kangdroid/node_share/";
+    #else
     const string location_destination = "/Users/KangDroid/Desktop/";
-
-    // TODO: Get IP Info from somewhere DS
-    const string address_server = "127.0.0.1";
-
-    // Let selected device as "master_device"
-    // TODO: Dynamically select devicess
-    Device master_device;
+    #endif
 
     // If argument is less than 2
     if (argc != 2) {
         cerr << "Program usage: " << argv[0] << " \"Program_Image_Path\"" << endl;
         return -1;
     }
+
+    // Initiate Device
+    vector<Device> device_container;
+    ifstream ifs("node.txt");
+    string buffer;
+    while (getline(ifs, buffer)) {
+        device_container.push_back(Device(buffer));
+    }
+    
+    if (device_container.size() > 1) {
+        sort(device_container.begin(), device_container.end(), compare);
+    }
+
+    // Init: Debug Information
+    for (int i = 0; i < device_container.size(); i++) {
+        cout << "IP: " << device_container[i].get_dev_ip() << endl;
+        cout << "Load CTR: " << device_container[i].get_dev_load() << endl;
+    }
+
+    // Let selected device as "master_device"
+    Device* selected = &device_container[0];
 
     // Check argv[0] is a valid path
     filesystem::path path_directory(argv[1]);
@@ -135,6 +164,6 @@ int main(int argc, char** argv) {
     copy_program(argv[1], (location_destination + path_directory.filename().string()).c_str());
 
     // exec program.
-    Client cl(address_server);
+    Client cl(selected->get_dev_ip());
     cl.send_string((location_destination + path_directory.filename().string()));
 }

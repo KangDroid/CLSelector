@@ -1,6 +1,7 @@
 #include "Device.h"
 
-Device::Device() {
+Device::Device(string address) {
+    this->dev_addr = address;
     this->init();
 }
 
@@ -9,7 +10,17 @@ void Device::init() {
     // sandbox state.
     this->master = true;
     this->dev_identifier = DEBUG_MASTER;
-    this->dev_load = 1.0;
+    #if defined(__linux__)
+    int tmp_output = -1;
+    syscall(291, &tmp_output);
+    if (tmp_output == -1) {
+        perror("Error occured when calling syscall 291: ");
+        exit(-1);
+    }
+    this->dev_load = (double)tmp_output;
+    #else
+    this->dev_load = 0;
+    #endif
 }
 
 bool Device::is_master() {
@@ -20,4 +31,8 @@ string Device::get_dev_id() {
 }
 double Device::get_dev_load() {
     return this->dev_load;
+}
+
+string Device::get_dev_ip() {
+    return this->dev_addr;
 }
