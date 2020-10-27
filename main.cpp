@@ -28,14 +28,7 @@
 #include "Device.h"
 #include "Client.h"
 #include "Server.h"
-
-/**
- * WARNING: THIS CONSTANT MAY NEED TO BE ADJUSTED ON LOW-MEMORY SYSTEM. THIS CONSTANT REQUIRES AT LEAST 2GB OF MEMORIES!
- * The Buffer.
- * We need to consider it's memory size.
- * How we calculate: 500 mb / sizoeof(long long), in x86_64 and g++, long long considered as 8 byte.
- */
-#define BUFFER_LENGTH 65536000
+#include "configuration.h"
 
 using namespace std;
 
@@ -46,7 +39,7 @@ using namespace std;
  */
 bool copy_program(const char* from, const char* dest) {
     long long *ptr_buffer;
-    long long *buffer_tmp = new long long[BUFFER_LENGTH];
+    long long *buffer_tmp = new long long[FILE_BUFFER_LENGTH];
     int from_fd = open(from, O_RDONLY | O_EXCL, S_IRWXG | S_IRWXO | S_IRWXU);
     int dest_fd = open(dest, O_RDWR | O_CREAT | O_TRUNC, S_IRWXG | S_IRWXO | S_IRWXU);
     int read_byte, write_byte;
@@ -59,7 +52,7 @@ bool copy_program(const char* from, const char* dest) {
     // Copy to buffer
     while (true) {
         while (true) {
-            read_byte = read(from_fd, buffer_tmp, BUFFER_LENGTH);
+            read_byte = read(from_fd, buffer_tmp, FILE_BUFFER_LENGTH);
             if (read_byte != -1) {
                 break;
             } else if (read_byte == -1 && errno == EINTR) {
@@ -135,7 +128,7 @@ int main(int argc, char** argv) {
 
     // Initiate Device
     // Open Server
-    Server server_infochange(5050);
+    Server server_infochange(MASTER_ACCEPT_PORT);
     vector<Device> device_container;
     ifstream ifs("node.txt");
     if (!ifs.is_open()) {
