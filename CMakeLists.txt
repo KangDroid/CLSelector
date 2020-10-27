@@ -16,4 +16,4 @@ endif (APPLE)
 add_executable(CLSelector main.cpp Device.cpp Client.cpp Server.cpp)
 
 # Build Server
-add_subdirectory(server)
+add_subdirectory(SubNode)
