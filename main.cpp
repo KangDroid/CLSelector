@@ -138,6 +138,10 @@ int main(int argc, char** argv) {
     Server server_infochange(5050);
     vector<Device> device_container;
     ifstream ifs("node.txt");
+    if (!ifs.is_open()) {
+        cerr << "Node information file is not opened. " << endl;
+        return -1;
+    }
     string buffer;
     cout << "Checking device" << endl;
     while (getline(ifs, buffer)) {
