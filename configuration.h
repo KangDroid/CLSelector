@@ -25,6 +25,12 @@
 #define FILE_BUFFER_LENGTH 65536000
 
 /**
+ * Buffer getting host name
+ * 4096 char array would be enought to get host name, hopefully.
+ */
+#define HOST_NAME_BUFFER 4096
+
+/**
  * Subnode - opened port. Used when master sending execution information.
  */
 #define SUBNODE_ACCEPT_PORT 8060

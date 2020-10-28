@@ -88,7 +88,9 @@ void Server::receive_exec() {
             int return_value = -1;
             syscall(291, &return_value);
             // Host Name
-            string to_send = "jetson-node1, " + to_string(return_value);
+            char buffer_hostname[HOST_NAME_BUFFER];
+            gethostname(buffer_hostname, HOST_NAME_BUFFER);
+            string to_send = string(buffer_hostname) + ", " + to_string(return_value);
             cl.send_string(to_send);
             exit(0);
         } else {
