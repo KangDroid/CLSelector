@@ -39,3 +39,8 @@
  * Master Node - opened port. Used when Subnode sending its load/host information.
  */
 #define MASTER_ACCEPT_PORT 5050
+
+/**
+ * Master Node Address
+ */
+#define MASTER_ADDRESS "192.168.0.8"
