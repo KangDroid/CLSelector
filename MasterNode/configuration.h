@@ -52,3 +52,11 @@
  * In this program, we use jetson nano, therefore its value would be 4.
  */
 #define TOTAL_CPU 4
+
+/**
+ * Syscall Constant
+ * SYSCALL_PER_NR indicates sys_cpu_nr_running
+ * SYSCALL_ZERO_NR indicates sys_get_nr_running
+ */
+#define SYSCALL_PER_NR 292
+#define SYSCALL_ZERO_NR 291

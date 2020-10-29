@@ -89,7 +89,7 @@ void Server::receive_exec() {
             int tmp_retval = -1;
             int sum_nr = 0;
             for (int i = 0; i < TOTAL_CPU; i++) {
-                syscall(292, &tmp_retval, i);
+                syscall(SYSCALL_PER_NR, &tmp_retval, i);
                 sum_nr += tmp_retval;
             }
             // Host Name
