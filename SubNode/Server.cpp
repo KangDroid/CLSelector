@@ -85,12 +85,17 @@ void Server::receive_exec() {
             cout << "Got get_info, creating client.." << endl;
             // Just hardcode master = 192.168.0.8
             Client cl(MASTER_ADDRESS, MASTER_ACCEPT_PORT);
-            int return_value = -1;
-            syscall(291, &return_value);
+            // Calculate total running program
+            int tmp_retval = -1;
+            int sum_nr = 0;
+            for (int i = 0; i < TOTAL_CPU; i++) {
+                syscall(292, &tmp_retval, i);
+                sum_nr += tmp_retval;
+            }
             // Host Name
             char buffer_hostname[HOST_NAME_BUFFER];
             gethostname(buffer_hostname, HOST_NAME_BUFFER);
-            string to_send = string(buffer_hostname) + ", " + to_string(return_value);
+            string to_send = string(buffer_hostname) + ", " + to_string(sum_nr);
             cl.send_string(to_send);
             exit(0);
         } else {

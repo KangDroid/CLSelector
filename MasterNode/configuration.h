@@ -44,3 +44,11 @@
  * Master Node Address
  */
 #define MASTER_ADDRESS "192.168.0.8"
+
+/**
+ * CPU Count
+ * This is used when calculating NR_RUNNING from kernel.
+ * There is protection when cpu's number is invalid, but anyway MATCH WITH KERNEL CONFIGURATION
+ * In this program, we use jetson nano, therefore its value would be 4.
+ */
+#define TOTAL_CPU 4
