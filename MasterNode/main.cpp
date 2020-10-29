@@ -126,6 +126,19 @@ int main(int argc, char** argv) {
         return -1;
     }
 
+    filesystem::path path_directory(argv[1]);
+    // Check argv[0] is a valid path
+    if (!filesystem::exists(path_directory)) {
+        cerr << "Request file: " << filesystem::absolute(path_directory) << " does not exists." << endl;
+        return -1;
+    }
+
+    pid_t copy_process = fork();
+    if (copy_process == 0) {
+        // Copy Program to destination
+        copy_program(argv[1], (location_destination + path_directory.filename().string()).c_str());
+    }
+
     // Initiate Device
     // Open Server
     Server server_infochange(MASTER_ACCEPT_PORT);
@@ -154,16 +167,8 @@ int main(int argc, char** argv) {
 
     // Let selected device as "master_device"
     Device* selected = &device_container[0];
-
-    // Check argv[0] is a valid path
-    filesystem::path path_directory(argv[1]);
-    if (!filesystem::exists(path_directory)) {
-        cerr << "Request file: " << filesystem::absolute(path_directory) << " does not exists." << endl;
-        return -1;
-    }
-
-    // Copy Program to destination
-    copy_program(argv[1], (location_destination + path_directory.filename().string()).c_str());
+    // Wait for fork - child process
+    wait(NULL);
 
     // exec program.
     if (selected->get_dev_ip() == "127.0.0.1") {
