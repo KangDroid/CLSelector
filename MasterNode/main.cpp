@@ -29,6 +29,7 @@
 #include "Client.h"
 #include "Server.h"
 #include "configuration.h"
+#include "Logger.h"
 
 using namespace std;
 
@@ -37,7 +38,7 @@ using namespace std;
  * Copy program from "from", to "dest"
  * Returns true if copy is completed, false if not.
  */
-bool copy_program(const char* from, const char* dest) {
+bool copy_program(const char* from, const char* dest) { 
     long long *ptr_buffer;
     long long *buffer_tmp = new long long[FILE_BUFFER_LENGTH];
     int from_fd = open(from, O_RDONLY | O_EXCL, S_IRWXG | S_IRWXO | S_IRWXU);
@@ -113,22 +114,33 @@ bool compare(Device dev_one, Device dev_two) {
  * Select, Push, Execute
  */
 int main(int argc, char** argv) {
+    Logger logger_tmp;
+    logger_tmp.initiate_stream("test.log");
+    LOG_V("Program Initiated with logger");
     // TODO: These location_destination should only contains NFS Folder.
     #if defined(__linux__)
     const string location_destination = "/home/kangdroid/node_share/";
     #else
     const string location_destination = "/Users/KangDroid/Desktop/";
     #endif
+    LOG_V("Location of COPY Destiniation is: " + location_destination );
 
     // If argument is less than 2
     if (argc != 2) {
+        LOG_E("Program Initiation Failed.\nArgument is less then 2!");
         cerr << "Program usage: " << argv[0] << " \"Program_Image_Path\"" << endl;
         return -1;
+    }
+
+    for (int i = 0; i < argc; i++) {
+        string tmp_logout = "Argument " + to_string(i+1) + ": " + argv[i];
+        LOG_V(tmp_logout.c_str());
     }
 
     filesystem::path path_directory(argv[1]);
     // Check argv[0] is a valid path
     if (!filesystem::exists(path_directory)) {
+        LOG_E("File requested is non-exist path.\nRefer to ARG 2 for input path.");
         cerr << "Request file: " << filesystem::absolute(path_directory) << " does not exists." << endl;
         return -1;
     }
@@ -136,6 +148,8 @@ int main(int argc, char** argv) {
     pid_t copy_process = fork();
     if (copy_process == 0) {
         // Copy Program to destination
+        string log_buffer = "Copying Program from: " + string(argv[1]) + " to: " + (location_destination + path_directory.filename().string());
+        LOG_V(log_buffer);
         copy_program(argv[1], (location_destination + path_directory.filename().string()).c_str());
     }
 
@@ -145,22 +159,28 @@ int main(int argc, char** argv) {
     vector<Device> device_container;
     ifstream ifs("node.txt");
     if (!ifs.is_open()) {
+        LOG_E("File node.txt does not exists");
         cerr << "Node information file is not opened. " << endl;
         return -1;
     }
     string buffer;
+    LOG_V("Checking detected device..");
     cout << "Checking device" << endl;
     while (getline(ifs, buffer)) {
+        LOG_V("Device Detected: " + buffer);
         cout << buffer << endl;
         device_container.push_back(Device(buffer, &server_infochange));
     }
     
     if (device_container.size() > 1) {
+        LOG_V("Sorting device queue based on work");
         sort(device_container.begin(), device_container.end(), compare);
     }
 
     // Init: Debug Information
     for (int i = 0; i < device_container.size(); i++) {
+        LOG_V("IP: " + device_container[i].get_dev_ip());
+        LOG_V("Load CTR: " + to_string( device_container[i].get_dev_load())); 
         cout << "IP: " << device_container[i].get_dev_ip() << endl;
         cout << "Load CTR: " << device_container[i].get_dev_load() << endl;
     }
@@ -183,4 +203,5 @@ int main(int argc, char** argv) {
         Client cl(selected->get_dev_ip(), SUBNODE_ACCEPT_PORT);
         cl.send_string((location_destination + path_directory.filename().string()));
     }
+    logger_tmp.close_stream();
 }

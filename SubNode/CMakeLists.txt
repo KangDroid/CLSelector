@@ -14,4 +14,4 @@ if (APPLE)
     set(CMAKE_CXX_STANDARD 17)
 endif (APPLE)
 
-add_executable(CLSelector_SubNode main.cpp Server.cpp Client.cpp)
+add_executable(CLSelector_SubNode main.cpp Server.cpp Client.cpp Logger.cpp)
