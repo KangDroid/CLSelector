@@ -126,7 +126,7 @@ int main(int argc, char** argv) {
     LOG_V("Location of COPY Destiniation is: " + location_destination );
 
     // If argument is less than 2
-    if (argc != 2) {
+    if (argc <  2) {
         LOG_E("Program Initiation Failed.\nArgument is less then 2!");
         cerr << "Program usage: " << argv[0] << " \"Program_Image_Path\"" << endl;
         return -1;
@@ -200,8 +200,12 @@ int main(int argc, char** argv) {
             wait(NULL);
         }
     } else {
+        string to_send_com = (location_destination + path_directory.filename().string());
+        for (int i = 2; i < argc; i++) {
+            to_send_com += (" " + string(argv[i]));
+        }
         Client cl(selected->get_dev_ip(), SUBNODE_ACCEPT_PORT);
-        cl.send_string((location_destination + path_directory.filename().string()));
+        cl.send_string(to_send_com);
     }
     logger_tmp.close_stream();
 }
